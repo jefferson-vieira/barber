@@ -1,12 +1,14 @@
+import BookingItem from '@/components/booking-item';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Home() {
-  const today = new Intl.DateTimeFormat('pt-br', {
-    dateStyle: 'full',
-  }).format(Date.now());
+  const today = new Date().toLocaleString('pt-br', { dateStyle: 'full' });
 
   return (
     <div className="flex flex-col gap-6 p-5">
@@ -32,6 +34,14 @@ export default function Home() {
           className="rounded-xl object-cover"
         />
       </div>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+
+        <BookingItem />
+      </section>
     </div>
   );
 }
