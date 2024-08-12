@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import db from '@/config/db';
+import { QUICK_SEARCH_OPTIONS } from '@/constants';
 import { SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 
@@ -34,6 +35,16 @@ export default async function Home() {
         <Button size="icon">
           <SearchIcon />
         </Button>
+      </section>
+
+      <section className="no-scrollbar flex gap-3 overflow-auto">
+        {QUICK_SEARCH_OPTIONS.map(({ imageUrl, title }, i) => (
+          <Button key={i} className="gap-2" variant="secondary">
+            <Image src={imageUrl} alt={title} height={16} width={16} />
+
+            {title}
+          </Button>
+        ))}
       </section>
 
       <div className="relative h-[calc(100vw/7*3)] w-full">
