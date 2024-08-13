@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Barbershop } from '@prisma/client';
 import { StarIcon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Props {
   barbershop: Barbershop;
@@ -14,7 +15,7 @@ const RATING = (5).toLocaleString('pt-br', {
 });
 
 export default function BarbershopItem({ barbershop }: Props) {
-  const { name, imageUrl, address } = barbershop;
+  const { id, name, imageUrl, address } = barbershop;
 
   return (
     <Card className="min-w-[calc(100vw/3*2)] rounded-2xl">
@@ -46,8 +47,8 @@ export default function BarbershopItem({ barbershop }: Props) {
             <p className="truncate text-sm text-gray-400">{address}</p>
           </div>
 
-          <Button variant="secondary" className="w-full">
-            Reservar
+          <Button variant="secondary" className="w-full" asChild>
+            <Link href={`/barbershops/${id}`}>Reservar</Link>
           </Button>
         </div>
       </CardContent>
