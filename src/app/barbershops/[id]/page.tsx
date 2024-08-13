@@ -1,3 +1,4 @@
+import BarbershopServiceItem from '@/components/barbershop-service-item';
 import Text from '@/components/text';
 import { Button } from '@/components/ui/button';
 import db from '@/config/db';
@@ -23,13 +24,16 @@ export default async function BarbershopPage({ params }: Props) {
     where: {
       id: params.id,
     },
+    include: {
+      services: true,
+    },
   });
 
   if (!barbershop) {
     return notFound();
   }
 
-  const { imageUrl, name, address, description } = barbershop;
+  const { imageUrl, name, address, description, services } = barbershop;
 
   return (
     <>
@@ -87,6 +91,19 @@ export default async function BarbershopPage({ params }: Props) {
       </section>
 
       <hr />
+
+      <section className="space-y-3 p-5">
+        <h2 className="text-xs font-bold uppercase text-gray-400">Serviços</h2>
+
+        <div className="space-y-3">
+          {services.map((barbershopService) => (
+            <BarbershopServiceItem
+              key={barbershopService.id}
+              barbershopService={barbershopService}
+            />
+          ))}
+        </div>
+      </section>
     </>
   );
 }
