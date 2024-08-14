@@ -1,3 +1,4 @@
+import Menu from '@/app/menu';
 import BarbershopServiceItem from '@/components/barbershop-service-item';
 import PhoneItem from '@/components/phone-item';
 import Text from '@/components/text';
@@ -54,13 +55,7 @@ export default async function BarbershopPage({ params }: Props) {
           </Link>
         </Button>
 
-        <Button
-          size="icon"
-          variant="secondary"
-          className="absolute right-4 top-4"
-        >
-          <MenuIcon />
-        </Button>
+        <Menu className="absolute right-4 top-4" variant="secondary" />
       </section>
 
       <div className="space-y-3 p-5">

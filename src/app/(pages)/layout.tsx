@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 
-import Menu from './menu';
+import Menu from '../menu';
 
 export default function PagesLayout({
   children,
@@ -21,7 +21,7 @@ export default function PagesLayout({
                 height={18}
               />
 
-              <Menu />
+              <Menu variant="outline" />
             </CardContent>
           </Card>
         </nav>

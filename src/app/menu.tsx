@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import { CalendarIcon, HomeIcon, LogOutIcon, MenuIcon } from 'lucide-react';
 import {
   Sheet,
@@ -13,11 +13,13 @@ import Image from 'next/image';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 
-export default function Menu() {
+interface Props extends ButtonProps {}
+
+export default function Menu(props: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="outline">
+        <Button size="icon" {...props}>
           <MenuIcon />
         </Button>
       </SheetTrigger>
