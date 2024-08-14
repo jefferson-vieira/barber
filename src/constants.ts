@@ -1,26 +1,26 @@
 export const QUICK_SEARCH_OPTIONS = [
   {
-    imageUrl: 'cabelo.svg',
+    imageUrl: '/cabelo.svg',
     title: 'Cabelo',
   },
   {
-    imageUrl: 'barba.svg',
+    imageUrl: '/barba.svg',
     title: 'Barba',
   },
   {
-    imageUrl: 'sobrancelha.svg',
+    imageUrl: '/sobrancelha.svg',
     title: 'Sobrancelha',
   },
   {
-    imageUrl: 'acabamento.svg',
+    imageUrl: '/acabamento.svg',
     title: 'Acabamento',
   },
   {
-    imageUrl: 'massagem.svg',
+    imageUrl: '/massagem.svg',
     title: 'Massagem',
   },
   {
-    imageUrl: 'hidratacao.svg',
+    imageUrl: '/hidratacao.svg',
     title: 'Hidratação',
   },
 ] as const;
