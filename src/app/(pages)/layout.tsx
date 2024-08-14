@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MenuIcon } from 'lucide-react';
 import Image from 'next/image';
+
+import Menu from './menu';
 
 export default function PagesLayout({
   children,
@@ -21,9 +21,7 @@ export default function PagesLayout({
                 height={18}
               />
 
-              <Button size="icon" variant="outline">
-                <MenuIcon />
-              </Button>
+              <Menu />
             </CardContent>
           </Card>
         </nav>
