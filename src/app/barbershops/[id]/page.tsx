@@ -40,7 +40,7 @@ export default async function BarbershopPage({ params }: Props) {
   return (
     <>
       <section className="relative">
-        <div className="h-[calc(100vw/39*25)] w-full">
+        <div className="w-full pt-[100%]">
           <Image src={imageUrl} fill alt={name} className="object-cover" />
         </div>
 

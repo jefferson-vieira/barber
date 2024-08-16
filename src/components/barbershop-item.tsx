@@ -1,27 +1,30 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { Barbershop } from '@prisma/client';
 import { StarIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ComponentProps } from 'react';
 
 interface Props {
   barbershop: Barbershop;
+  className?: ComponentProps<typeof Card>['className'];
 }
 
 const RATING = (5).toLocaleString('pt-br', {
   minimumFractionDigits: 1,
 });
 
-export default function BarbershopItem({ barbershop }: Props) {
+export default function BarbershopItem({ barbershop, className }: Props) {
   const { id, name, imageUrl, address } = barbershop;
 
   return (
-    <Card className="min-w-[calc(100vw/3*2)] rounded-2xl">
+    <Card className={cn('rounded-2xl', className)}>
       <CardContent className="p-1">
         <div className="relative">
-          <div className="h-[calc(100vw/3*2/39*25)] w-full">
+          <div className="w-full pt-[100%]">
             <Image
               alt={name}
               fill
