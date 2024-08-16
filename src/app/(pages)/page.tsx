@@ -1,5 +1,6 @@
 import BarbershopItem from '@/components/barbershop-item';
 import BookingItem from '@/components/booking-item';
+import Search from '@/components/search';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,13 +30,7 @@ export default async function Home() {
         <p>{today}</p>
       </section>
 
-      <section className="flex items-center gap-2">
-        <Input placeholder="Buscar..." />
-
-        <Button size="icon">
-          <SearchIcon />
-        </Button>
-      </section>
+      <Search />
 
       <section className="no-scrollbar flex gap-3 overflow-auto">
         {QUICK_SEARCH_OPTIONS.map(({ imageUrl, title }, i) => (
