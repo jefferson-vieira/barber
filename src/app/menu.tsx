@@ -53,11 +53,15 @@ export default function Menu(props: Props) {
 
           <div className="flex flex-col gap-1">
             {QUICK_SEARCH_OPTIONS.map(({ imageUrl, title }, i) => (
-              <Button className="justify-start gap-3" key={i} variant="ghost">
-                <Image alt={title} src={imageUrl} width={18} height={18} />
+              <SheetClose key={i} asChild>
+                <Button className="justify-start gap-3" variant="ghost" asChild>
+                  <Link href={`/barbershops?service=${title}`}>
+                    <Image alt={title} src={imageUrl} width={18} height={18} />
 
-                <span className="capitalize">{title}</span>
-              </Button>
+                    <span className="capitalize">{title}</span>
+                  </Link>
+                </Button>
+              </SheetClose>
             ))}
           </div>
         </Session>

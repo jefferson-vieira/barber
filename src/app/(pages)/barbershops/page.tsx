@@ -4,21 +4,42 @@ import db from '@/config/db';
 
 interface Props {
   searchParams: {
-    search?: string;
+    name?: string;
+    service?: string;
   };
 }
 
 export default async function BarbershopsPage({ searchParams }: Props) {
-  const { search } = searchParams;
+  const { name, service } = searchParams;
 
   const barbershops = await db.barbershop.findMany({
     where: {
-      name: {
-        contains: search,
-        mode: 'insensitive',
-      },
+      OR: [
+        name
+          ? {
+              name: {
+                contains: name,
+                mode: 'insensitive',
+              },
+            }
+          : {},
+        service
+          ? {
+              services: {
+                some: {
+                  name: {
+                    contains: service,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            }
+          : {},
+      ],
     },
   });
+
+  const search = name ?? service;
 
   return (
     <div className="space-y-6 px-5 py-5">

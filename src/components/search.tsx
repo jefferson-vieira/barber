@@ -34,7 +34,7 @@ export default function Search() {
   });
 
   function onSubmit({ search }: FormSchema) {
-    router.push(`/barbershops?search=${search}`);
+    router.push(`/barbershops?name=${search}`);
   }
 
   return (

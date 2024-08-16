@@ -10,6 +10,7 @@ import db from '@/config/db';
 import { QUICK_SEARCH_OPTIONS } from '@/constants';
 import { SearchIcon } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default async function Home() {
   const today = new Date().toLocaleString('pt-br', { dateStyle: 'full' });
@@ -34,10 +35,12 @@ export default async function Home() {
 
       <section className="no-scrollbar flex gap-3 overflow-auto">
         {QUICK_SEARCH_OPTIONS.map(({ imageUrl, title }, i) => (
-          <Button key={i} className="gap-2" variant="secondary">
-            <Image src={imageUrl} alt={title} height={16} width={16} />
+          <Button key={i} className="gap-2" variant="secondary" asChild>
+            <Link href={`/barbershops?service=${title}`}>
+              <Image src={imageUrl} alt={title} height={16} width={16} />
 
-            {title}
+              {title}
+            </Link>
           </Button>
         ))}
       </section>
