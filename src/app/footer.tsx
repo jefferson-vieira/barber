@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="mt-auto">
       <Card>
         <CardContent className="px-5 py-6 text-center">
           <p className="text-sm text-gray-400">
