@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Session from './session';
+import QuickSearchLink from '@/components/quick-search-link';
 
 interface Props extends ButtonProps {}
 
@@ -52,15 +53,13 @@ export default function Menu(props: Props) {
           <hr className="my-6" />
 
           <div className="flex flex-col gap-1">
-            {QUICK_SEARCH_OPTIONS.map(({ imageUrl, title }, i) => (
+            {QUICK_SEARCH_OPTIONS.map((option, i) => (
               <SheetClose key={i} asChild>
-                <Button className="justify-start gap-3" variant="ghost" asChild>
-                  <Link href={`/barbershops?service=${title}`}>
-                    <Image alt={title} src={imageUrl} width={18} height={18} />
-
-                    <span className="capitalize">{title}</span>
-                  </Link>
-                </Button>
+                <QuickSearchLink
+                  option={option}
+                  className="justify-start gap-3"
+                  variant="ghost"
+                />
               </SheetClose>
             ))}
           </div>

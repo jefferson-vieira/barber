@@ -1,5 +1,6 @@
 import BarbershopItem from '@/components/barbershop-item';
 import BookingItem from '@/components/booking-item';
+import QuickSearchLink from '@/components/quick-search-link';
 import Search from '@/components/search';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -34,14 +35,13 @@ export default async function Home() {
       <Search />
 
       <section className="no-scrollbar flex gap-3 overflow-auto">
-        {QUICK_SEARCH_OPTIONS.map(({ imageUrl, title }, i) => (
-          <Button key={i} className="gap-2" variant="secondary" asChild>
-            <Link href={`/barbershops?service=${title}`}>
-              <Image src={imageUrl} alt={title} height={16} width={16} />
-
-              {title}
-            </Link>
-          </Button>
+        {QUICK_SEARCH_OPTIONS.map((option, i) => (
+          <QuickSearchLink
+            key={i}
+            className="gap-2"
+            variant="secondary"
+            option={option}
+          />
         ))}
       </section>
 
