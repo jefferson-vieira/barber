@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { ptBR } from 'date-fns/locale';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SelectSingleEventHandler } from 'react-day-picker';
 import { Card, CardContent } from '@/components/ui/card';
 import { TIME_SLOTS } from '@/constants';
@@ -21,6 +21,7 @@ import { format, set } from 'date-fns';
 import createBooking from '@/actions/booking/create';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
+import getFreeBookingTimes from '@/actions/booking/get-free-booking-times';
 
 interface Props {
   barbershopService: Prisma.BarbershopServiceGetPayload<{
@@ -33,9 +34,33 @@ export default function Booking({ barbershopService }: Props) {
 
   const { toast } = useToast();
 
+  const [open, setOpen] = useState(false);
+
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [selectedTime, setSelectedTime] =
     useState<(typeof TIME_SLOTS)[number]>();
+
+  const [freeTimes, setFreeTimes] = useState<
+    Awaited<ReturnType<typeof getFreeBookingTimes>>
+  >([]);
+
+  useEffect(() => {
+    async function fetchFreeBookingSlots() {
+      if (!selectedDay) {
+        return;
+      }
+
+      const bookings = await getFreeBookingTimes({
+        date: selectedDay,
+      });
+
+      setFreeTimes(bookings);
+    }
+
+    fetchFreeBookingSlots();
+
+    // TODO Abort query (in future), see https://github.com/prisma/prisma/issues/15594
+  }, [selectedDay]);
 
   const handleDaySelect: SelectSingleEventHandler = (day) => {
     setSelectedDay(day);
@@ -60,6 +85,8 @@ export default function Booking({ barbershopService }: Props) {
       toast({
         description: 'Reserva criada com sucesso!',
       });
+
+      handleClose();
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -71,6 +98,13 @@ export default function Booking({ barbershopService }: Props) {
     }
   };
 
+  const handleClose = () => {
+    setSelectedDay(undefined);
+    setSelectedTime(undefined);
+    setFreeTimes([]);
+    setOpen(false);
+  };
+
   const { name, barbershop } = barbershopService;
 
   const price = Number(barbershopService.price).toLocaleString('pt-br', {
@@ -79,12 +113,10 @@ export default function Booking({ barbershopService }: Props) {
   });
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="secondary" size="sm">
-          Reservar
-        </Button>
-      </SheetTrigger>
+    <Sheet open={open} onOpenChange={handleClose}>
+      <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
+        Reservar
+      </Button>
 
       <SheetContent className="w-full overflow-y-auto">
         <div className="space-y-6">
@@ -129,7 +161,7 @@ export default function Booking({ barbershopService }: Props) {
               <hr />
 
               <div className="no-scrollbar flex gap-3 overflow-x-auto">
-                {TIME_SLOTS.map((timeSlot, i) => {
+                {freeTimes.map((timeSlot, i) => {
                   const isSelected = timeSlot === selectedTime;
 
                   return (
@@ -202,14 +234,9 @@ export default function Booking({ barbershopService }: Props) {
           )}
 
           <SheetFooter>
-            <SheetClose asChild>
-              <Button
-                disabled={!selectedTime}
-                onClick={handleCreateBookingClick}
-              >
-                Confirmar
-              </Button>
-            </SheetClose>
+            <Button disabled={!selectedTime} onClick={handleCreateBookingClick}>
+              Confirmar
+            </Button>
           </SheetFooter>
         </div>
       </SheetContent>
