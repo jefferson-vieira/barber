@@ -17,11 +17,13 @@ import { SelectSingleEventHandler } from 'react-day-picker';
 import { Card, CardContent } from '@/components/ui/card';
 import { TIME_SLOTS } from '@/constants';
 import { Prisma } from '@prisma/client';
-import { format, set } from 'date-fns';
+import { addDays, format, set } from 'date-fns';
 import createBooking from '@/actions/booking/create';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
 import getFreeBookingTimes from '@/actions/booking/get-free-booking-times';
+
+const TOMORROW = addDays(new Date(), 1);
 
 interface Props {
   barbershopService: Prisma.BarbershopServiceGetPayload<{
@@ -129,6 +131,7 @@ export default function Booking({ barbershopService }: Props) {
           <Calendar
             mode="single"
             locale={ptBR}
+            fromDate={TOMORROW}
             selected={selectedDay}
             onSelect={handleDaySelect}
             styles={{
