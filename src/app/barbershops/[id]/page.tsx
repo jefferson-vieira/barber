@@ -27,7 +27,11 @@ export default async function BarbershopPage({ params }: Props) {
       id: params.id,
     },
     include: {
-      services: true,
+      services: {
+        include: {
+          barbershop: true,
+        },
+      },
     },
   });
 

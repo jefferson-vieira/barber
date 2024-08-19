@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarbershopService } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import Image from 'next/image';
+import Booking from '@/components/booking';
 
 interface Props {
-  barbershopService: BarbershopService;
+  barbershopService: Prisma.BarbershopServiceGetPayload<{
+    include: { barbershop: true };
+  }>;
 }
 
 export default function BarbershopServiceItem({ barbershopService }: Props) {
@@ -37,9 +40,7 @@ export default function BarbershopServiceItem({ barbershopService }: Props) {
           <div className="mt-auto flex items-center justify-between">
             <p className="text-sm font-bold text-primary">{price}</p>
 
-            <Button variant="secondary" size="sm">
-              Reservar
-            </Button>
+            <Booking barbershopService={barbershopService} />
           </div>
         </div>
       </CardContent>
