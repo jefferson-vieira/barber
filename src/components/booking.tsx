@@ -17,7 +17,10 @@ import { SelectSingleEventHandler } from 'react-day-picker';
 import { Card, CardContent } from '@/components/ui/card';
 import { TIME_SLOTS } from '@/constants';
 import { Prisma } from '@prisma/client';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
+import createBooking from '@/actions/booking/create';
+import { useSession } from 'next-auth/react';
+import { useToast } from '@/components/ui/use-toast';
 
 interface Props {
   barbershopService: Prisma.BarbershopServiceGetPayload<{
@@ -26,6 +29,10 @@ interface Props {
 }
 
 export default function Booking({ barbershopService }: Props) {
+  const { data } = useSession();
+
+  const { toast } = useToast();
+
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [selectedTime, setSelectedTime] =
     useState<(typeof TIME_SLOTS)[number]>();
@@ -36,6 +43,32 @@ export default function Booking({ barbershopService }: Props) {
 
   const handleTimeSelect = (time: (typeof TIME_SLOTS)[number]) => {
     setSelectedTime(time);
+  };
+
+  const handleCreateBookingClick = async () => {
+    const [hours, minutes] = selectedTime!.split(':').map(Number);
+
+    try {
+      await createBooking({
+        serviceId: barbershopService.id,
+        // TODO: ensure user sign-in
+        // @ts-ignore
+        userId: data.user.id,
+        date: set(selectedDay!, { hours, minutes }),
+      });
+
+      toast({
+        description: 'Reserva criada com sucesso!',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Ops! Algo deu errado.',
+        description: 'Erro ao criar reserva.',
+      });
+
+      console.error(error);
+    }
   };
 
   const { name, barbershop } = barbershopService;
@@ -170,7 +203,12 @@ export default function Booking({ barbershopService }: Props) {
 
           <SheetFooter>
             <SheetClose asChild>
-              <Button disabled={!selectedTime}>Confirmar</Button>
+              <Button
+                disabled={!selectedTime}
+                onClick={handleCreateBookingClick}
+              >
+                Confirmar
+              </Button>
             </SheetClose>
           </SheetFooter>
         </div>
