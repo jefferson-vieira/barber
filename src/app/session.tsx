@@ -2,18 +2,11 @@
 
 import { LogInIcon, LogOutIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { ReactNode } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import {
-  Dialog,
-  DialogHeader,
-  DialogTrigger,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { SiGoogle } from '@icons-pack/react-simple-icons';
+
+import Link from 'next/link';
 
 interface Props {
   children: ReactNode;
@@ -21,10 +14,6 @@ interface Props {
 
 export default function Session({ children }: Props) {
   const { data } = useSession();
-
-  const handleSignInWithGoogleClick = () => {
-    signIn('google');
-  };
 
   const handleSignOutClick = () => {
     signOut();
@@ -36,32 +25,11 @@ export default function Session({ children }: Props) {
         <div className="mt-6 flex items-center justify-between gap-3">
           <h2 className="text-lg font-bold">Olá. Faça seu login!</h2>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="icon">
-                <LogInIcon />
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="w-[calc(100vw-4.5rem)]">
-              <DialogHeader>
-                <DialogTitle>Faça login na plataforma</DialogTitle>
-
-                <DialogDescription>
-                  Conecte-se usando sua conta do Google
-                </DialogDescription>
-              </DialogHeader>
-
-              <Button
-                className="gap-2 font-bold"
-                variant="outline"
-                onClick={handleSignInWithGoogleClick}
-              >
-                <SiGoogle size={18} />
-                Google
-              </Button>
-            </DialogContent>
-          </Dialog>
+          <Button size="icon" asChild>
+            <Link href="/login">
+              <LogInIcon />
+            </Link>
+          </Button>
         </div>
 
         {children}
