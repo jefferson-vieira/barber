@@ -22,6 +22,7 @@ import createBooking from '@/actions/booking/create';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
 import getFreeBookingTimes from '@/actions/booking/get-free-booking-times';
+import { useRouter } from 'next/navigation';
 
 const TOMORROW = addDays(new Date(), 1);
 
@@ -32,7 +33,9 @@ interface Props {
 }
 
 export default function Booking({ barbershopService }: Props) {
-  const { data } = useSession();
+  const { status } = useSession();
+
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -64,6 +67,16 @@ export default function Booking({ barbershopService }: Props) {
     // TODO Abort query (in future), see https://github.com/prisma/prisma/issues/15594
   }, [selectedDay]);
 
+  const onBookingClick = () => {
+    if (status === 'unauthenticated') {
+      router.push(`/login?callbackUrl=${window.location.href}`);
+
+      return;
+    }
+
+    setOpen(true);
+  };
+
   const handleDaySelect: SelectSingleEventHandler = (day) => {
     setSelectedDay(day);
   };
@@ -78,9 +91,6 @@ export default function Booking({ barbershopService }: Props) {
     try {
       await createBooking({
         serviceId: barbershopService.id,
-        // TODO: ensure user sign-in
-        // @ts-ignore
-        userId: data.user.id,
         date: set(selectedDay!, { hours, minutes }),
       });
 
@@ -116,7 +126,7 @@ export default function Booking({ barbershopService }: Props) {
 
   return (
     <Sheet open={open} onOpenChange={handleClose}>
-      <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
+      <Button variant="secondary" size="sm" onClick={onBookingClick}>
         Reservar
       </Button>
 
