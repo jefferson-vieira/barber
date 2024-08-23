@@ -1,31 +1,49 @@
+import BookingItemStatus from '@/components/booking-item-status';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Barbershop } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-export default function BookingItem() {
-  const now = new Date();
+interface Props {
+  booking: Prisma.BookingGetPayload<{
+    include: {
+      service: {
+        include: {
+          barbershop: true;
+        };
+      };
+    };
+  }>;
+}
 
-  const month = now.toLocaleString('pt-br', { month: 'long' });
+export default function BookingItem({ booking }: Props) {
+  const { date, service } = booking;
 
-  const day = now.toLocaleString('pt-br', { day: '2-digit' });
+  const month = date.toLocaleString('pt-br', { month: 'long' });
 
-  const time = now.toLocaleTimeString();
+  const day = date.toLocaleString('pt-br', { day: '2-digit' });
+
+  const time = date.toLocaleTimeString('pt-br', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  const { barbershop } = service;
 
   return (
     <Card>
       <CardContent className="flex justify-between p-0 px-5">
         <div className="flex flex-col gap-2 py-5">
-          <Badge className="w-fit">Confirmado</Badge>
+          <BookingItemStatus date={date} />
 
-          <h3 className="font-semibold">Corte de cabelo</h3>
+          <h3 className="font-semibold">{service.name}</h3>
 
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
-              <AvatarImage src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png" />
+              <AvatarImage src={barbershop.imageUrl} />
             </Avatar>
 
-            <p className="text-sm">Barbearia</p>
+            <p className="text-sm">{barbershop.name}</p>
           </div>
         </div>
 

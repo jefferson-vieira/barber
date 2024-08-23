@@ -9,12 +9,38 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import db from '@/config/db';
 import { QUICK_SEARCH_OPTIONS } from '@/constants';
+import { auth } from '@/helpers/auth';
 import { SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function Home() {
-  const today = new Date().toLocaleString('pt-br', { dateStyle: 'full' });
+  const session = await auth();
+
+  const now = new Date();
+
+  const today = now.toLocaleString('pt-br', { dateStyle: 'full' });
+
+  const bookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: session.user.id,
+          date: {
+            gte: now,
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: 'asc',
+        },
+      })
+    : [];
 
   const barbershops = await db.barbershop.findMany();
 
@@ -25,7 +51,7 @@ export default async function Home() {
   });
 
   return (
-    <div className="flex flex-col gap-6 p-5">
+    <div className="space-y-6">
       <section>
         <h2 className="text-xl font-bold">Hello world</h2>
 
@@ -54,15 +80,21 @@ export default async function Home() {
         />
       </div>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-xs font-bold uppercase text-gray-400">
-          Agendamentos
-        </h2>
+      {bookings.length && (
+        <section className="space-y-3">
+          <h2 className="text-xs font-bold uppercase text-gray-400">
+            Agendamentos
+          </h2>
 
-        <BookingItem />
-      </section>
+          <div className="space-y-3">
+            {bookings.map((booking) => (
+              <BookingItem key={booking.id} booking={booking} />
+            ))}
+          </div>
+        </section>
+      )}
 
-      <section className="flex flex-col gap-3">
+      <section className="space-y-3">
         <h2 className="text-xs font-bold uppercase text-gray-400">
           Recomendados
         </h2>
@@ -78,7 +110,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-3">
+      <section className="space-y-3">
         <h2 className="text-xs font-bold uppercase text-gray-400">Populares</h2>
 
         <div className="no-scrollbar flex gap-4 overflow-auto">
