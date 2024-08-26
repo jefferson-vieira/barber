@@ -42,7 +42,7 @@ export default async function BarbershopsPage({ searchParams }: Props) {
   const search = name ?? service;
 
   return (
-    <div className="space-y-6 px-5 py-5">
+    <div className="space-y-6">
       <Search />
 
       <section className="space-y-6">

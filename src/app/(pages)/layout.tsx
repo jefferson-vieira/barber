@@ -30,7 +30,7 @@ export default function PagesLayout({
         </nav>
       </header>
 
-      <main>{children}</main>
+      <main className="px-5 py-6">{children}</main>
     </>
   );
 }
