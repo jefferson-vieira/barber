@@ -1,18 +1,37 @@
+'use client';
+
+import deleteBooking from '@/actions/booking/delete';
 import BookingItemStatus from '@/components/booking-item-status';
 import BookingSummary from '@/components/booking-summary';
 import PhoneItem from '@/components/phone-item';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Badge, type BadgeProps } from '@/components/ui/badge';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { toast } from '@/components/ui/use-toast';
 import { Prisma } from '@prisma/client';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface Props {
   booking: Prisma.BookingGetPayload<{
@@ -27,6 +46,28 @@ interface Props {
 }
 
 export default function BookingItem({ booking }: Props) {
+  const [open, setOpen] = useState(false);
+
+  const handleBookingCancelClick = async () => {
+    try {
+      await deleteBooking(booking.id);
+
+      toast({
+        description: 'Reserva cancelada com sucesso!',
+      });
+
+      setOpen(false);
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Ops! Algo deu errado.',
+        description: 'Erro ao cancelar reserva.',
+      });
+
+      console.error(error);
+    }
+  };
+
   const { date, service } = booking;
 
   const month = date.toLocaleString('pt-br', { month: 'long' });
@@ -43,7 +84,7 @@ export default function BookingItem({ booking }: Props) {
   const bookingItemStatus = <BookingItemStatus date={date} />;
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="w-full">
         <Card>
           <CardContent className="flex justify-between p-0 px-5">
@@ -114,6 +155,39 @@ export default function BookingItem({ booking }: Props) {
               <PhoneItem key={i} phone={phone} />
             ))}
           </div>
+
+          <SheetFooter className="grid grid-cols-2 gap-3">
+            <SheetClose asChild>
+              <Button variant="outline">Voltar</Button>
+            </SheetClose>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Cancelar reserva</Button>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent className="w-11/12 rounded-xl">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Cancelar Reserva</AlertDialogTitle>
+
+                  <AlertDialogDescription>
+                    Tem certeza que deseja cancelar esse agendamento?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter className="grid grid-cols-2 items-end gap-3">
+                  <AlertDialogCancel>Voltar</AlertDialogCancel>
+
+                  <AlertDialogAction
+                    className={buttonVariants({ variant: 'destructive' })}
+                    onClick={handleBookingCancelClick}
+                  >
+                    Confirmar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </SheetFooter>
         </div>
       </SheetContent>
     </Sheet>
