@@ -26,7 +26,7 @@ export default function Session({ children }: Props) {
           <h2 className="text-lg font-bold">Olá. Faça seu login!</h2>
 
           <Button size="icon" asChild>
-            <Link href="/login">
+            <Link href={`/login?callbackUrl=${window.location.href}`}>
               <LogInIcon />
             </Link>
           </Button>
