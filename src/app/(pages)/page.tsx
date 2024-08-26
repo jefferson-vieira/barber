@@ -90,7 +90,7 @@ export default async function Home() {
         />
       </div>
 
-      {bookings.length && (
+      {bookings.length ? (
         <section className="space-y-3">
           <h2 className="text-xs font-bold uppercase text-gray-400">
             Agendamentos
@@ -102,7 +102,7 @@ export default async function Home() {
             ))}
           </div>
         </section>
-      )}
+      ) : null}
 
       <section className="space-y-3">
         <h2 className="text-xs font-bold uppercase text-gray-400">
