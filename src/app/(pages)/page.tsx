@@ -53,7 +53,17 @@ export default async function Home() {
   return (
     <div className="space-y-6">
       <section>
-        <h2 className="text-xl font-bold">Hello world</h2>
+        <h2 className="text-xl">
+          Olá,{' '}
+          {session?.user ? (
+            <span className="font-bold">{session.user.name}</span>
+          ) : (
+            <Link className="hover:underline" href="/login?callbackUrl=/">
+              Faça seu Login
+            </Link>
+          )}
+          !
+        </h2>
 
         <p>{today}</p>
       </section>
