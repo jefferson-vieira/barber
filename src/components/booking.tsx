@@ -174,22 +174,28 @@ export default function Booking({ barbershopService }: Props) {
             <>
               <hr />
 
-              <div className="no-scrollbar flex gap-3 overflow-x-auto">
-                {freeTimes.map((timeSlot, i) => {
-                  const isSelected = timeSlot === selectedTime;
+              {freeTimes.length ? (
+                <div className="no-scrollbar flex gap-3 overflow-x-auto">
+                  {freeTimes.map((timeSlot, i) => {
+                    const isSelected = timeSlot === selectedTime;
 
-                  return (
-                    <Button
-                      key={i}
-                      variant={isSelected ? 'default' : 'outline'}
-                      className="rounded-full"
-                      onClick={() => handleTimeSelect(timeSlot)}
-                    >
-                      {timeSlot}
-                    </Button>
-                  );
-                })}
-              </div>
+                    return (
+                      <Button
+                        key={i}
+                        variant={isSelected ? 'default' : 'outline'}
+                        className="rounded-full"
+                        onClick={() => handleTimeSelect(timeSlot)}
+                      >
+                        {timeSlot}
+                      </Button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-center text-xs">
+                  Nenhum horário disponível neste dia. Tente outra data.
+                </p>
+              )}
             </>
           )}
 
