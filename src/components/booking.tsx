@@ -23,6 +23,7 @@ import { useSession } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
 import getFreeBookingTimes from '@/actions/booking/get-free-booking-times';
 import { useRouter } from 'next/navigation';
+import BookingSummary from '@/components/booking-summary';
 
 const TOMORROW = addDays(new Date(), 1);
 
@@ -196,53 +197,11 @@ export default function Booking({ barbershopService }: Props) {
             <>
               <hr />
 
-              <Card>
-                <CardContent className="p-3">
-                  <table className="w-full border-separate border-spacing-y-3">
-                    <thead>
-                      <tr>
-                        <th align="left" className="font-bold">
-                          {name}
-                        </th>
-
-                        <th align="right" className="text-sm font-bold">
-                          {price}
-                        </th>
-                      </tr>
-                    </thead>
-
-                    <tbody className="text-sm">
-                      <tr>
-                        <td className="text-gray-400" align="left">
-                          Data
-                        </td>
-
-                        <td align="right">
-                          {format(selectedDay!, "d 'de' MMMM", {
-                            locale: ptBR,
-                          })}
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td className="text-gray-400" align="left">
-                          Horário
-                        </td>
-
-                        <td align="right">{selectedTime}</td>
-                      </tr>
-
-                      <tr>
-                        <td className="text-gray-400" align="left">
-                          Barbearia
-                        </td>
-
-                        <td align="right">{barbershop.name}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </CardContent>
-              </Card>
+              <BookingSummary
+                barbershopService={barbershopService}
+                date={selectedDay!}
+                time={selectedTime}
+              />
             </>
           )}
 
