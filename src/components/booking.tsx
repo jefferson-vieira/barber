@@ -24,6 +24,7 @@ import { useToast } from '@/components/ui/use-toast';
 import getFreeBookingTimes from '@/actions/booking/get-free-booking-times';
 import { useRouter } from 'next/navigation';
 import BookingSummary from '@/components/booking-summary';
+import { Route } from 'next';
 
 const TOMORROW = addDays(new Date(), 1);
 
@@ -70,7 +71,7 @@ export default function Booking({ barbershopService }: Props) {
 
   const onBookingClick = () => {
     if (status === 'unauthenticated') {
-      router.push(`/login?callbackUrl=${window.location.href}`);
+      router.push(`/login?callbackUrl=${window.location.href}` as Route);
 
       return;
     }

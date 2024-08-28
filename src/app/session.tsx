@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 import Link from 'next/link';
+import { Route } from 'next';
 
 interface Props {
   children: ReactNode;
@@ -26,7 +27,7 @@ export default function Session({ children }: Props) {
           <h2 className="text-lg font-bold">Olá. Faça seu login!</h2>
 
           <Button size="icon" asChild>
-            <Link href={`/login?callbackUrl=${window.location.href}`}>
+            <Link href={`/login?callbackUrl=${window.location.href}` as Route}>
               <LogInIcon />
             </Link>
           </Button>

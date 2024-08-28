@@ -11,6 +11,7 @@ import db from '@/config/db';
 import { QUICK_SEARCH_OPTIONS } from '@/constants';
 import { auth } from '@/helpers/auth';
 import { SearchIcon } from 'lucide-react';
+import { Route } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -58,7 +59,10 @@ export default async function Home() {
           {session?.user ? (
             <span className="font-bold">{session.user.name}</span>
           ) : (
-            <Link className="hover:underline" href="/login?callbackUrl=/">
+            <Link
+              className="hover:underline"
+              href={'/login?callbackUrl=/' as Route}
+            >
               Faça seu Login
             </Link>
           )}
