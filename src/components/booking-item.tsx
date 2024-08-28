@@ -1,5 +1,6 @@
 'use client';
 
+import { Time } from '@/@types/time';
 import deleteBooking from '@/actions/booking/delete';
 import BookingItemStatus from '@/components/booking-item-status';
 import BookingSummary from '@/components/booking-summary';
@@ -77,7 +78,7 @@ export default function BookingItem({ booking }: Props) {
   const time = date.toLocaleTimeString('pt-br', {
     hour: '2-digit',
     minute: '2-digit',
-  });
+  }) as Time;
 
   const { barbershop } = service;
 
