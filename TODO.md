@@ -6,7 +6,6 @@
   - [ ] Ensure only booking in future, considering the time
 - [ ] Show barbershop address in real map on bookings page
 - [ ] Revalidate cache for free booking times after delete booking
-- [ ] Show booking (bookings page + details) after create booking
 - [ ] Create date-time format util
   - [ ] Refactor date-time format occurrences to use it
 

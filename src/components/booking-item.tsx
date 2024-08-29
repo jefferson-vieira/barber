@@ -44,10 +44,11 @@ interface Props {
       };
     };
   }>;
+  defaultOpen?: boolean;
 }
 
-export default function BookingItem({ booking }: Props) {
-  const [open, setOpen] = useState(false);
+export default function BookingItem({ booking, defaultOpen = false }: Props) {
+  const [open, setOpen] = useState(defaultOpen);
 
   const handleBookingCancelClick = async () => {
     try {

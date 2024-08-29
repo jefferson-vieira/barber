@@ -2,7 +2,13 @@ import BookingItem from '@/components/booking-item';
 import db from '@/config/db';
 import { auth } from '@/helpers/auth';
 
-export default async function BookingsPage() {
+interface Props {
+  searchParams: {
+    bookingId?: string;
+  };
+}
+
+export default async function BookingsPage({ searchParams }: Props) {
   const session = await auth();
 
   if (!session?.user) {
@@ -53,6 +59,8 @@ export default async function BookingsPage() {
 
   const hasBookings = booked.length || done.length;
 
+  const { bookingId } = searchParams;
+
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-bold">Agendamentos</h1>
@@ -67,7 +75,11 @@ export default async function BookingsPage() {
 
               <div className="space-y-3">
                 {booked.map((booking) => (
-                  <BookingItem key={booking.id} booking={booking} />
+                  <BookingItem
+                    key={booking.id}
+                    booking={booking}
+                    defaultOpen={booking.id === bookingId}
+                  />
                 ))}
               </div>
             </section>
@@ -81,7 +93,11 @@ export default async function BookingsPage() {
 
               <div className="space-y-3">
                 {done.map((booking) => (
-                  <BookingItem key={booking.id} booking={booking} />
+                  <BookingItem
+                    key={booking.id}
+                    booking={booking}
+                    defaultOpen={booking.id === bookingId}
+                  />
                 ))}
               </div>
             </section>

@@ -25,6 +25,8 @@ import getFreeBookingTimes from '@/actions/booking/get-free-booking-times';
 import { useRouter } from 'next/navigation';
 import BookingSummary from '@/components/booking-summary';
 import { Route } from 'next';
+import { ToastAction } from '@/components/ui/toast';
+import Link from 'next/link';
 
 const TOMORROW = addDays(new Date(), 1);
 
@@ -91,13 +93,20 @@ export default function Booking({ barbershopService }: Props) {
     const [hours, minutes] = selectedTime!.split(':').map(Number);
 
     try {
-      await createBooking({
+      const bookingId = await createBooking({
         serviceId: barbershopService.id,
         date: set(selectedDay!, { hours, minutes }),
       });
 
       toast({
         description: 'Reserva criada com sucesso!',
+        action: (
+          <ToastAction altText="Ver agendamento" asChild>
+            <Link href={`/bookings?bookingId=${bookingId}`}>
+              Ver agendamento
+            </Link>
+          </ToastAction>
+        ),
       });
 
       handleClose();
