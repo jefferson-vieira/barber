@@ -1,6 +1,6 @@
 import BarbershopItem from '@/components/barbershop-item';
 import Search from '@/components/search';
-import db from '@/config/db';
+import { getBarbershops } from '@/data/barbershop';
 
 interface Props {
   searchParams: {
@@ -12,31 +12,9 @@ interface Props {
 export default async function BarbershopsPage({ searchParams }: Props) {
   const { name, service } = searchParams;
 
-  const barbershops = await db.barbershop.findMany({
-    where: {
-      OR: [
-        name
-          ? {
-              name: {
-                contains: name,
-                mode: 'insensitive',
-              },
-            }
-          : {},
-        service
-          ? {
-              services: {
-                some: {
-                  name: {
-                    contains: service,
-                    mode: 'insensitive',
-                  },
-                },
-              },
-            }
-          : {},
-      ],
-    },
+  const barbershops = await getBarbershops({
+    name,
+    service,
   });
 
   const search = name ?? service;

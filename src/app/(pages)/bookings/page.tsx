@@ -1,5 +1,5 @@
 import BookingItem from '@/components/booking-item';
-import db from '@/config/db';
+import { getBookings, getDoneBookings } from '@/data/bookings';
 import { auth } from '@/helpers/auth';
 
 interface Props {
@@ -16,46 +16,7 @@ export default async function BookingsPage({ searchParams }: Props) {
     return null;
   }
 
-  const now = new Date();
-
-  const [booked, done] = await Promise.all([
-    db.booking.findMany({
-      where: {
-        userId: session.user.id,
-        date: {
-          gt: now,
-        },
-      },
-      include: {
-        service: {
-          include: {
-            barbershop: true,
-          },
-        },
-      },
-      orderBy: {
-        date: 'asc',
-      },
-    }),
-    db.booking.findMany({
-      where: {
-        userId: session.user.id,
-        date: {
-          lte: now,
-        },
-      },
-      include: {
-        service: {
-          include: {
-            barbershop: true,
-          },
-        },
-      },
-      orderBy: {
-        date: 'desc',
-      },
-    }),
-  ]);
+  const [booked, done] = await Promise.all([getBookings(), getDoneBookings()]);
 
   const hasBookings = booked.length || done.length;
 
