@@ -3,7 +3,7 @@ import BarbershopServiceItem from '@/components/barbershop-service-item';
 import PhoneItem from '@/components/phone-item';
 import Text from '@/components/text';
 import { Button } from '@/components/ui/button';
-import db from '@/config/db';
+import { getBarbershop } from '@/data/barbershop';
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,19 +21,8 @@ const RATING = (5).toLocaleString('pt-br', {
 
 const RATINGS = Math.random();
 
-export default async function BarbershopPage({ params }: Props) {
-  const barbershop = await db.barbershop.findUnique({
-    where: {
-      id: params.id,
-    },
-    include: {
-      services: {
-        include: {
-          barbershop: true,
-        },
-      },
-    },
-  });
+export default async function BarbershopPage({ params: { id } }: Props) {
+  const barbershop = await getBarbershop(id);
 
   if (!barbershop) {
     return notFound();

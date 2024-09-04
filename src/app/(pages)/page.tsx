@@ -7,13 +7,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import db from '@/config/db';
 import { QUICK_SEARCH_OPTIONS } from '@/constants';
+import { getBarbershops, getPopularBarbershops } from '@/data/barbershop';
 import { auth } from '@/helpers/auth';
 import { SearchIcon } from 'lucide-react';
 import { Route } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getBookings } from '@/data/bookings';
 
 export default async function Home() {
   const session = await auth();
@@ -22,34 +23,11 @@ export default async function Home() {
 
   const today = now.toLocaleString('pt-br', { dateStyle: 'full' });
 
-  const bookings = session?.user
-    ? await db.booking.findMany({
-        where: {
-          userId: session.user.id,
-          date: {
-            gte: now,
-          },
-        },
-        include: {
-          service: {
-            include: {
-              barbershop: true,
-            },
-          },
-        },
-        orderBy: {
-          date: 'asc',
-        },
-      })
-    : [];
-
-  const barbershops = await db.barbershop.findMany();
-
-  const popularBarbershops = await db.barbershop.findMany({
-    orderBy: {
-      name: 'desc',
-    },
-  });
+  const [bookings, barbershops, popularBarbershops] = await Promise.all([
+    session?.user ? getBookings() : [],
+    getBarbershops(),
+    getPopularBarbershops(),
+  ]);
 
   return (
     <div className="space-y-6">
